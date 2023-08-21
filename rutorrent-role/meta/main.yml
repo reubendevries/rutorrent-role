@@ -1,0 +1,7 @@
+galaxy_info:
+  role_name: setup_seedbox
+  author: reuben_devries
+  description: Setup a seedbox using rtorrent and rutorrent.
+  license: MIT
+  min_ansible_version: '2.1'
+  standalone: true

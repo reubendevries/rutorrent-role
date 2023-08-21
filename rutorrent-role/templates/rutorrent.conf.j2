@@ -1,0 +1,13 @@
+server {
+
+    listen 80 default_server;
+
+    root /www/data;
+    
+    location / {
+
+        proxy_pass https://localhost:80;
+    
+    }
+
+}

@@ -1,0 +1,5 @@
+---
+# vars file for rutorrent
+cpu_cores: '{{ ansible_facts.processor_cores | int > 2 }}'
+memory: '{{ ansible_facts.memtotal_mb | int > 4000 }}'
+architecture: '{{ (ansible_facts.machine == "amd64") or (ansible_facts.machine == "arm64") }}'

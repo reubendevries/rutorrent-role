@@ -1,0 +1,5 @@
+---
+# tasks file for rutorrent
+- name: Check hardware requirements.
+  ansible.builtin.include_tasks:
+    file: check_hardware.yml

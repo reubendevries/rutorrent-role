@@ -1,0 +1,9 @@
+---
+- name: Setup rtorrent on server.
+  hosts: localhost
+  gather_facts: true
+  become: true
+  roles:
+    - rutorrent-role
+  vars:
+    domain_name:

@@ -1,0 +1,13 @@
+---
+- name: Set nginx_configured variable to false.
+  ansible.builtin.set_fact:
+    nginx_configured: false
+
+- name: Debug nginx_configured variable.
+  ansible.builtin.debug:
+    var: nginx_configured
+  tags:
+    - never
+    - debug
+
+- name: Copy nginx template.
