@@ -1,0 +1,28 @@
+---
+- name: Set rutorrent_configured variable to false.
+  ansible.builtin.set_fact:
+    rtorrent_configured: false
+
+- name: Debug rutorrent_configured variable.
+  ansible.builtin.debug:
+    var: rutorrent_configured
+  tags:
+    - never
+    - debug
+
+- name: Clone rutorrent in /var/www/
+  ansible.builtin.git:
+    repo: git@github.com:Novik/ruTorrent.git
+    dest: /var/www/rutorrent
+    single_branch: true
+    branch: master
+    update: false
+
+- name: Update permissions for rutorrent.
+  ansible.builtin.file:
+    path: /var/www/rutorrent
+    recurse: true
+    owner: www-data
+    group: www-data
+    mode: '0o775'
+    

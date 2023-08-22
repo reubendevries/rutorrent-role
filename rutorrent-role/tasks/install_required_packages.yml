@@ -8,19 +8,13 @@
     name: '{{ package.name }}'
     state: '{{ package.state }}'
   loop:
-    - { name: nginx, state: present }
-    - { name: software-properties-common, state: present }
-    - { name: ca-certificates, state: present }
-    - { name: lsb-release, state: present }
-    - { name: apt-transport-https, state: present }
-    - { name: php8.1, state: present }
-    - { name: php8.1-cgi, state: present }
-    - { name: php8.1-fpm, state: present }
-    - { name: gcc, state: present }
-    - { name: ncurses, state: present }
-    - { nmae: libsigc++-2.0, state: present }
-    - { name: xmlrpc-c, state: present }
+    - { name: git, state: present }
     - { name: vim, state: present }
+    - { name: php8.1, state: present }
+    - { name: php81-cgi, state: present }
+    - { name: php8.1-fpm, state: present }
+    - { name: nginx, state: present }
+    - { name: rtorrent, state: present }
   register: packages_list
   loop_control:
     loop_var: package
@@ -34,7 +28,7 @@
     packages_installed: true
   when: packages_list is not empty
 
-- name: Include tasks to install packages.
+- name: Include tasks to configure nginx.
   ansible_builtin.include_tasks:
     file: configure_nginx.yml
   when: packages_installed
