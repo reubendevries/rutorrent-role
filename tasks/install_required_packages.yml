@@ -1,0 +1,34 @@
+---
+- name: Set packages_installed variable to false.
+  ansible_builtin.set_fact:
+    packages_installed: false
+
+- name: Install required packages
+  ansible.builtin.packages:
+    name: '{{ package.name }}'
+    state: '{{ package.state }}'
+  loop:
+    - { name: git, state: present }
+    - { name: vim, state: present }
+    - { name: php8.1, state: present }
+    - { name: php81-cgi, state: present }
+    - { name: php8.1-fpm, state: present }
+    - { name: nginx, state: present }
+    - { name: rtorrent, state: present }
+  register: packages_list
+  loop_control:
+    loop_var: package
+
+- name: Debug packages_list.
+  ansible.builtin.debug:
+    var: packages_list
+
+- name: Set packages_installed variable to true.
+  ansible_builtin.set_fact:
+    packages_installed: true
+  when: packages_list is not empty
+
+- name: Include tasks to configure nginx.
+  ansible_builtin.include_tasks:
+    file: configure_nginx.yml
+  when: packages_installed

@@ -1,0 +1,62 @@
+---
+- name: Set nginx_configured variable to false.
+  ansible.builtin.set_fact:
+    nginx_configured: false
+
+- name: Debug nginx_configured variable.
+  ansible.builtin.debug:
+    var: nginx_configured
+  tags:
+    - never
+    - debug
+
+- name: Start nginx systemd service.
+  ansible.builtin.systemd:
+    name: nginx.service
+    state: stopped
+
+- name: Copy nginx template to sites-available folder.
+  ansible.builtin.template:
+    src: ../templates/rutorrent.conf.j2
+    dest: /etc/nginx/sites-available/rtorrent.conf
+    owner: root
+    group: root
+    mode: '0o644'
+
+- name: Symlink nginx template from sites-available folder to sites-enabled folder.
+  ansible.builtin.file:
+    src: /etc/nginx/sites-available/rtorrent.conf
+    path: /etc/nginx/sites-enabled/rtorrent.conf
+    state: link
+    owner: root
+    group: root
+    mode: '0o644'
+    follow: true
+
+- name: Start nginx systemd service.
+  ansible.builtin.systemd:
+    name: nginx.service
+    state: started
+    enabled: true
+    daemon_reload: true
+
+- name: Test nginx configuration
+  ansible.builtin.command:
+    cmd: nginx -t
+  register: nginx_test_result
+
+- name: Debug the nginx_test_result variable.
+  ansible.builtin.debug:
+    var: nginx_test_result
+  tags:
+    - never
+    - debug
+
+- name: Set nginx_configured variable to true.
+  ansible.builtin.set_fact:
+    nginx_configured: true
+  when: nginx_test_result
+
+- name: Include tasks to configure rtorrent.
+  ansible.builtin.include_tasks:
+    file: configure_rtorrent.yml

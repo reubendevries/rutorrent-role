@@ -1,0 +1,9 @@
+---
+- name: Set hardware check to false.
+  ansible.builtin.set_fact:
+    hardware_check: false
+
+- name: debug ansible_facts.
+  ansible.builtin.set_fact:
+    var: ansible_facts
+
