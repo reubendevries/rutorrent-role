@@ -3,26 +3,7 @@
   ansible.builtin.set_fact:
     hardware_check: false
 
-- name: Debug variables.
-  ansible.builtin.debug:
-    var: hardware_check
-  tags:
-    - never
-    - debug
-
-- name: Flip hardware_check variable if passes conditionals.
+- name: debug ansible_facts.
   ansible.builtin.set_fact:
-    hardware_check: true
-  when: cpu_cores and memory and architecture
+    var: ansible_facts
 
-- name: Debug variables.
-  ansible.builtin.debug:
-    var: hardware_check
-  tags:
-    - never
-    - debug
-
-- name: Include tasks to install packages.
-  ansible_builtin.include_tasks:
-    file: install_required_packages.yml
-  when: hardware_check
