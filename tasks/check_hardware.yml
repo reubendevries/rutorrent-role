@@ -5,5 +5,5 @@
 
 - name: debug ansible_facts.
   ansible.builtin.set_fact:
-    var: ansible_facts
+    msg: "{{ ansible_facts }}"
 
