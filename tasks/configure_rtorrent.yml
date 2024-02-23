@@ -3,9 +3,3 @@
   ansible.builtin.set_fact:
     rtorrent_configured: false
 
-- name: Debug rtorrent_configured variable.
-  ansible.builtin.debug:
-    var: rtorrent_configured
-  tags:
-    - never
-    - debug

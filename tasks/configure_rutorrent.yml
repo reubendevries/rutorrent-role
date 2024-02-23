@@ -12,17 +12,17 @@
 
 - name: Clone rutorrent in /var/www/
   ansible.builtin.git:
-    repo: git@github.com:Novik/ruTorrent.git
-    dest: /var/www/rutorrent
+    repo: "git@github.com:Novik/ruTorrent.git"
+    dest: "/var/www/rutorrent"
     single_branch: true
-    branch: master
+    branch: "master"
     update: false
 
 - name: Update permissions for rutorrent.
   ansible.builtin.file:
-    path: /var/www/rutorrent
+    path: "/var/www/rutorrent"
     recurse: true
-    owner: www-data
-    group: www-data
-    mode: '0o775'
+    owner: "www-data"
+    group: "www-data"
+    mode: "0o775"
     

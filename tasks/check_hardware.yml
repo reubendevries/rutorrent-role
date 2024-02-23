@@ -2,8 +2,9 @@
 - name: Set hardware check to false.
   ansible.builtin.set_fact:
     hardware_check: false
+    architecture: "{{ ansible_facts['architecture'] }}"
+    operating_system: "{{ ansible_facts['os_family'] | lower }}"
+    architecture_cores: "{{ ansible_facts['processor_nproc'] }}"
 
-- name: debug ansible_facts.
-  ansible.builtin.set_fact:
-    msg: "{{ ansible_facts }}"
+
 

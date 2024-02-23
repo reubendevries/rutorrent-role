@@ -3,13 +3,6 @@
   ansible.builtin.set_fact:
     nginx_configured: false
 
-- name: Debug nginx_configured variable.
-  ansible.builtin.debug:
-    var: nginx_configured
-  tags:
-    - never
-    - debug
-
 - name: Start nginx systemd service.
   ansible.builtin.systemd:
     name: nginx.service
@@ -41,21 +34,14 @@
     daemon_reload: true
 
 - name: Test nginx configuration
-  ansible.builtin.command:
+  ansible.builtin.shell:
     cmd: nginx -t
   register: nginx_test_result
-
-- name: Debug the nginx_test_result variable.
-  ansible.builtin.debug:
-    var: nginx_test_result
-  tags:
-    - never
-    - debug
 
 - name: Set nginx_configured variable to true.
   ansible.builtin.set_fact:
     nginx_configured: true
-  when: nginx_test_result
+  when: nginx_test_result.rc == 0
 
 - name: Include tasks to configure rtorrent.
   ansible.builtin.include_tasks:
