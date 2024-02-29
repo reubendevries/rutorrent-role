@@ -3,3 +3,40 @@
   ansible.builtin.set_fact:
     rtorrent_configured: false
 
+- name: Create the rtorrent directory.
+  ansible.builtin.file:
+    path: "{{ ansible_facts['user_dir'] }}/rtorrent"
+    state: directory
+    owner: "{{ ansible_facts['user_uid'] }}"
+    group: "{{ ansible_facts['user_gid'] }}"
+    mode: "0o744"
+
+- name: Get rtorrent configuration file.
+  ansible.builtin.copy:
+    src: rtorrent.rc
+    dest: "{{ ansible_facts['user_dir'] }}/rtorrent/rtorrent.rc"
+    owner: "{{ ansible_facts['user_uid'] }}"
+    group: "{{ ansible_facts['user_gid'] }}"
+    mode: "0o644"
+
+- name: Copy rtorrent systemd file.
+  become: true
+  ansible.builtin.copy:
+    src: rtorrent.service
+    dest: /etc/systemd/system/rtorrent.service
+    owner: root
+    group: root
+    mode: '0o644'
+
+- name: Enable and start rtorrent systemd
+  become: true
+  ansible.builtin.systemd:
+    name: rtorrent.service
+    status: started
+    enabled: true
+    daemon_reload: true
+  when: rtorrent_systemd is changed.
+
+- name: Set rtorrent_configured variable to true.
+  ansible.builtin.set_fact:
+    rtorrent_configured: true

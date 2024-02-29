@@ -4,7 +4,7 @@
     packages_installed: false
 
 - name: Install required packages
-  ansible.builtin.packages:
+  ansible.builtin.apt:
     name: '{{ package.name }}'
     state: "latest"
   loop:
@@ -14,10 +14,30 @@
     - { name: php81-cgi }
     - { name: php8.1-fpm }
     - { name: nginx }
+    - { name: tmux }
     - { name: rtorrent }
   register: packages_list
   loop_control:
     loop_var: package
+  when: ansible_facts["os_family"] | lower == "debian"
+
+- name: Install required packages
+  ansible.builtin.dnf:
+    name: '{{ package.name }}'
+    state: "latest"
+  loop:
+    - { name: git }
+    - { name: vim }
+    - { name: php8.1 }
+    - { name: php81-cgi }
+    - { name: php8.1-fpm }
+    - { name: nginx }
+    - { name: tmux }
+    - { name: rtorrent }
+  register: packages_list
+  loop_control:
+    loop_var: package
+  when: ansible_facts["os_family"] | lower == "redhat"
 
 - name: Set packages_installed variable to true.
   ansible_builtin.set_fact:

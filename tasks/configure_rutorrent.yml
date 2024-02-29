@@ -3,13 +3,6 @@
   ansible.builtin.set_fact:
     rtorrent_configured: false
 
-- name: Debug rutorrent_configured variable.
-  ansible.builtin.debug:
-    var: rutorrent_configured
-  tags:
-    - never
-    - debug
-
 - name: Clone rutorrent in /var/www/
   ansible.builtin.git:
     repo: "git@github.com:Novik/ruTorrent.git"
@@ -25,4 +18,12 @@
     owner: "www-data"
     group: "www-data"
     mode: "0o775"
-    
+
+- name: Set rutorrent_configured variable to true.
+  ansible.builtin.set_fact:
+    rtorrent_configured: true
+
+- name: Configure rtorrent binaries.
+  ansible.builtin.include_tasks:
+    file: configure_rtorrent.yml
+  when: rtorrent_configured is true.

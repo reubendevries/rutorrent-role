@@ -5,6 +5,15 @@
     architecture: "{{ ansible_facts['architecture'] }}"
     operating_system: "{{ ansible_facts['os_family'] | lower }}"
     architecture_cores: "{{ ansible_facts['processor_nproc'] }}"
+  register: hardware_checked
 
+- name: Set hardware check to true.
+  ansible.builtin.set_fact:
+    hardware_check: true
+  when: hardware_checked is succeeded
 
+- name: Install required packages
+  ansible.builtin.include_tasks:
+    file: install_required_packages.yml
+  when: hardware_check is true
 
